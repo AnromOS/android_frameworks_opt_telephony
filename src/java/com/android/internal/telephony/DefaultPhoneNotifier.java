@@ -317,6 +317,20 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         }
     }
 
+    //add by rom - jin
+    public static int convertRealCallState(Call.State state) {
+        /*switch (state) {
+            case RINGING:
+                return TelephonyManager.CALL_STATE_RINGING;
+            case OFFHOOK:
+                return TelephonyManager.CALL_STATE_OFFHOOK;
+            default:
+                return TelephonyManager.CALL_STATE_IDLE;
+        }*/
+        int result = convertPreciseCallState(state);
+        return result;
+    }
+
     /**
      * Convert the TelephonyManager.CALL_STATE_* constants into the
      * {@link PhoneConstants.State} enum for the public API.
