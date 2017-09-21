@@ -1485,6 +1485,9 @@ public abstract class Phone extends Handler implements PhoneInternalInterface {
      */
     public abstract PhoneConstants.State getState();
 
+    //add by rom
+    public abstract PhoneConstants.State getRealState();
+
     /**
      * Retrieves the IccFileHandler of the Phone instance
      */
