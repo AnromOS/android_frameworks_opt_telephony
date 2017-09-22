@@ -54,7 +54,7 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
 
     @Override
     public void notifyPhoneState(Phone sender) {
-        Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyPhoneState")
+        Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyPhoneState");
         Call ringingCall = sender.getRingingCall();
         int subId = sender.getSubId();
         int phoneId = sender.getPhoneId();
@@ -64,41 +64,48 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
         }
         try {
             if (mRegistry != null) {
-                Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyPhoneState: mRegistry="
+                Rlog.d(LOG_TAG, "jin noti DefaultPhoneNotifier notifyPhoneState: mRegistry="
                     + mRegistry + " ss=" + sender.getSignalStrength() + " sender=" + sender
                     + " phoneId" + phoneId + " subId" + subId + " sender.getsate()"
                     + sender.getState() + " incomingNumber" + incomingNumber);
-                  mRegistry.notifyCallStateForPhoneId(phoneId, subId,
+                mRegistry.notifyCallStateForPhoneId(phoneId, subId,
                         convertCallState(sender.getState()), incomingNumber);
+                Rlog.d(LOG_TAG, "jin noti DefaultPhoneNotifier notifyRealCallStateForPhoneId: mRegistry="
+                    + mRegistry + " ss=" + sender.getSignalStrength() + " sender=" + sender
+                    + " phoneId" + phoneId + " subId" + subId + " ringingCall.getState()"
+                    + ringingCall.getState() + " incomingNumber" + incomingNumber);
+                mRegistry.notifyRealCallStateForPhoneId(phoneId, subId,
+                        ringingCall.getRealState(), incomingNumber);
             }
         } catch (RemoteException ex) {
             // system process is dead
         }
     }
 
-    @Override
-    public void notifyRealPhoneState(Phone sender) {
-        Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyRealPhoneState")
-        Call ringingCall = sender.getRingingCall();
-        int subId = sender.getSubId();
-        int phoneId = sender.getPhoneId();
-        String incomingNumber = "";
-        if (ringingCall != null && ringingCall.getEarliestConnection() != null) {
-            incomingNumber = ringingCall.getEarliestConnection().getAddress();
-        }
-        try {
-            if (mRegistry != null) {
-                Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyRealPhoneState: mRegistry="
-                    + mRegistry + " ss=" + sender.getSignalStrength() + " sender=" + sender
-                    + " phoneId" + phoneId + " subId" + subId + " ringingCall.getsate()"
-                    + ringingCall.getState() + " incomingNumber" + incomingNumber);
-                mRegistry.notifyRealCallStateForPhoneId(phoneId, subId,
-                        convertRealCallState(ringingCall.getState()), incomingNumber);
-            }
-        } catch (RemoteException ex) {
-            // system process is dead
-        }
-    }
+    //add by rom -jin
+    //~ @Override
+    //~ public void notifyRealPhoneState(Phone sender) {
+        //~ Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyRealPhoneState");
+        //~ Call ringingCall = sender.getRingingCall();
+        //~ int subId = sender.getSubId();
+        //~ int phoneId = sender.getPhoneId();
+        //~ String incomingNumber = "";
+        //~ if (ringingCall != null && ringingCall.getEarliestConnection() != null) {
+            //~ incomingNumber = ringingCall.getEarliestConnection().getAddress();
+        //~ }
+        //~ try {
+            //~ if (mRegistry != null) {
+                //~ Rlog.d(LOG_TAG, "jin DefaultPhoneNotifier notifyRealPhoneState: mRegistry="
+                    //~ + mRegistry + " ss=" + sender.getSignalStrength() + " sender=" + sender
+                    //~ + " phoneId" + phoneId + " subId" + subId + " ringingCall.getsate()"
+                    //~ + ringingCall.getState() + " incomingNumber" + incomingNumber);
+                //~ mRegistry.notifyRealCallStateForPhoneId(phoneId, subId,
+                        //~ convertRealCallState(ringingCall.getState()), incomingNumber);
+            //~ }
+        //~ } catch (RemoteException ex) {
+            //~ // system process is dead
+        //~ }
+    //~ }
 
     @Override
     public void notifyServiceState(Phone sender) {
@@ -344,20 +351,6 @@ public class DefaultPhoneNotifier implements PhoneNotifier {
             default:
                 return TelephonyManager.CALL_STATE_IDLE;
         }
-    }
-
-    //add by rom - jin
-    public static int convertRealCallState(Call.State state) {
-        /*switch (state) {
-            case RINGING:
-                return TelephonyManager.CALL_STATE_RINGING;
-            case OFFHOOK:
-                return TelephonyManager.CALL_STATE_OFFHOOK;
-            default:
-                return TelephonyManager.CALL_STATE_IDLE;
-        }*/
-        int result = convertPreciseCallState(state);
-        return result;
     }
 
     /**

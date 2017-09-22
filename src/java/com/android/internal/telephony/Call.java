@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.telephony.Rlog;
+//add by rom
+import android.telephony.TelephonyManager;
 
 /**
  * {@hide}
@@ -112,6 +114,39 @@ public abstract class Call {
      */
     public State getState() {
         return mState;
+    }
+
+    //add by rom -jin
+    public int getRealState() {
+        State state = getState();
+        switch (state) {
+            case IDLE:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_IDLE);
+                return TelephonyManager.REAL_CALL_STATE_IDLE;
+            case ACTIVE:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_ACTIVE);
+                return TelephonyManager.REAL_CALL_STATE_ACTIVE;
+            case HOLDING:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_HOLDING);
+                return TelephonyManager.REAL_CALL_STATE_HOLDING;
+            case INCOMING:
+            case WAITING:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_RINGING);
+                return TelephonyManager.REAL_CALL_STATE_RINGING;
+            case DIALING:
+            case ALERTING:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_DIALING);
+                return TelephonyManager.REAL_CALL_STATE_DIALING;
+            case DISCONNECTED:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_DISCONNECTED);
+                return TelephonyManager.REAL_CALL_STATE_DISCONNECTED;
+            case DISCONNECTING:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:" + TelephonyManager.REAL_CALL_STATE_DISCONNECTING);
+                return TelephonyManager.REAL_CALL_STATE_DISCONNECTING;
+            default:
+            Rlog.i(LOG_TAG,"jin noti fraCall state:default");
+                return TelephonyManager.REAL_CALL_STATE_IDLE;
+        }
     }
 
     /**
