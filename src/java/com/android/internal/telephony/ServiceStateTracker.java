@@ -85,7 +85,6 @@ import com.android.internal.telephony.cdma.CdmaSubscriptionSourceManager;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.telephony.dataconnection.DcTracker;
 import com.android.internal.telephony.metrics.TelephonyMetrics;
-import com.android.internal.telephony.OperatorUtils;
 import com.android.internal.telephony.uicc.IccCardApplicationStatus.AppState;
 import com.android.internal.telephony.uicc.IccRecords;
 import com.android.internal.telephony.uicc.RuimRecords;
@@ -93,6 +92,8 @@ import com.android.internal.telephony.uicc.SIMRecords;
 import com.android.internal.telephony.uicc.UiccCardApplication;
 import com.android.internal.telephony.uicc.UiccController;
 import com.android.internal.util.IndentingPrintWriter;
+
+import com.mokee.utils.OperatorUtils;
 
 /**
  * {@hide}
@@ -2208,7 +2209,7 @@ public class ServiceStateTracker extends Handler {
                         "of service, set plmn='" + plmn + "'");
             } else if (combinedRegState == ServiceState.STATE_IN_SERVICE) {
                 // In either home or roaming service
-                plmn = mSS.getOperatorAlphaLong();
+                plmn = OperatorUtils.operatorReplace(mSS.getOperatorAlphaLong(), mSS.getOperatorNumeric());
                 showPlmn = !TextUtils.isEmpty(plmn) &&
                         ((rule & SIMRecords.SPN_RULE_SHOW_PLMN)
                                 == SIMRecords.SPN_RULE_SHOW_PLMN);
